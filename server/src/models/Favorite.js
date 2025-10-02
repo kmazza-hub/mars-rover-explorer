@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const FavoriteSchema = new mongoose.Schema(
   {
-    nasa_id: { type: Number, required: true }, // removed index:true
+    nasa_id: { type: Number, required: true }, // no field-level index here
     img_src: { type: String, required: true },
     earth_date: { type: String },
     sol: { type: Number },
@@ -12,7 +12,7 @@ const FavoriteSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Keep a single unique index on nasa_id
+// single unique index on nasa_id
 FavoriteSchema.index({ nasa_id: 1 }, { unique: true });
 
 export default mongoose.model('Favorite', FavoriteSchema);
