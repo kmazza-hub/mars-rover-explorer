@@ -76,3 +76,19 @@ main { background: var(--card); border: 1px solid var(--border); border-radius: 
   border: 1px solid var(--border);
 }
 .btn.ghost:hover { color: var(--text); }
+
+.nav .fav-link { display: inline-flex; align-items: center; gap: 6px; }
+.badge {
+  display: inline-flex;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+  background: #0f1629;
+  color: var(--text);
+}
+main.single { max-width: 1100px; margin: 0 auto; padding: 16px; }

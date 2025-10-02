@@ -5,16 +5,18 @@ import RoverList from './components/RoverList.jsx';
 import Controls from './components/Controls.jsx';
 import PhotoGrid from './components/PhotoGrid.jsx';
 import PhotoModal from './components/PhotoModal.jsx';
+import FavoritesPage from './components/FavoritesPage.jsx';
 import { useRovers } from './hooks/useRovers.js';
 
 function Explorer() {
   const { roverName } = useParams();
   const [sp, setSp] = useSearchParams();
   const navigate = useNavigate();
-  const { data: roversData } = useRovers();
+  const { data: roversData, isLoading, isError } = useRovers();
 
   const rover = roverName || roversData?.rovers?.[0]?.name?.toLowerCase();
 
+  // Redirect "/" -> "/{first-rover}"
   useEffect(() => {
     if (!roverName && rover) navigate(`/${rover}?${sp.toString()}`, { replace: true });
   }, [roverName, rover]);
@@ -23,13 +25,34 @@ function Explorer() {
     return roversData?.rovers?.find((r) => r.name.toLowerCase() === rover);
   }, [roversData, rover]);
 
-  // Defaults: earth_date = rover.max_date; page=1
+  // Defaults: type=earth, date=max_date, page=1
   useEffect(() => {
-    if (!sp.get('type')) sp.set('type', 'earth');
-    if (!sp.get('page')) sp.set('page', '1');
-    if (roverMeta && !sp.get('date')) sp.set('date', roverMeta.max_date);
-    setSp(sp, { replace: true });
+    if (!roverMeta) return;
+    const next = new URLSearchParams(sp);
+    if (!next.get('type')) next.set('type', 'earth');
+    if (!next.get('page')) next.set('page', '1');
+    if (!next.get('date')) next.set('date', roverMeta.max_date);
+    // only update if we actually changed something (prevents re-renders)
+    if (next.toString() !== sp.toString()) setSp(next, { replace: true });
   }, [roverMeta]);
+
+  if (isError) {
+    return (
+      <div className="container">
+        <Header />
+        <main className="single"><div className="error">Failed to load rovers.</div></main>
+      </div>
+    );
+  }
+
+  if (isLoading || !rover || !roverMeta) {
+    return (
+      <div className="container">
+        <Header />
+        <main className="single"><div>Loading…</div></main>
+      </div>
+    );
+  }
 
   const state = {
     rover,
@@ -45,7 +68,6 @@ function Explorer() {
       if (v === '' || v == null) next.delete(k);
       else next.set(k, String(v));
     });
-    // Reset page when filters change
     if ('date' in patch || 'camera' in patch || 'type' in patch) next.set('page', '1');
     setSp(next);
   };
@@ -70,7 +92,19 @@ function Explorer() {
 export default function App() {
   return (
     <Routes>
-      <Route path="/:roverName?" element={<Explorer />} />
+      <Route path="/" element={<Explorer />} />
+      <Route
+        path="/favorites"
+        element={
+          <div className="container">
+            <Header />
+            <main className="single">
+              <FavoritesPage />
+            </main>
+          </div>
+        }
+      />
+      <Route path="/:roverName" element={<Explorer />} />
     </Routes>
   );
 }
