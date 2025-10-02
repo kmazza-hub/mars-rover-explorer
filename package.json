@@ -1,14 +1,1 @@
-{
-"name": "mars-rover-explorer",
-"private": true,
-"scripts": {
-"install:all": "npm --prefix server i && npm --prefix client i",
-"dev": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
-"dev:server": "npm --prefix server run dev",
-"dev:client": "npm --prefix client run dev",
-"start": "npm --prefix server start"
-},
-"devDependencies": {
-"concurrently": "^9.0.1"
-}
-}
+{"name":"mars-rover-explorer","private":true,"scripts":{"install:all":"npm --prefix server i && npm --prefix client i","dev":"concurrently \"npm:dev:server\" \"npm:dev:client\"","dev:server":"npm --prefix server run dev","dev:client":"npm --prefix client run dev","start":"npm --prefix server start"},"devDependencies":{"concurrently":"^9.2.1"}}
