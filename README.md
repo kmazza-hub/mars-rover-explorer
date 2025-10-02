@@ -172,6 +172,10 @@ Redis-backed cache and per-user auth for favorites.
 
 
 
+![Rovers list](docs/01-rovers.png)
+![Photo grid](docs/02-grid.png)
+![Photo modal](docs/03-modal.png)
+![Favorites](docs/04-favorites.png)
 
 
 
