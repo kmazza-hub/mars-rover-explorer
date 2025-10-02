@@ -29,9 +29,13 @@ aside { background: var(--card); border: 1px solid var(--border); border-radius:
 
 
 main { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; }
-.controls .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-.controls label { display: flex; gap: 6px; align-items: center; background: #0f1629; border: 1px solid var(--border); padding: 8px 10px; border-radius: 10px; }
 .controls select, .controls input { background: #0f1629; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; }
+.controls .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+.controls .seg { display: grid; gap: 6px; }
+.controls .label { display: block; font-size: 12px; opacity: .85; margin-bottom: 2px; }
+.date-stepper { display: inline-flex; gap: 8px; }
+.hint { font-size: 12px; opacity: .85; margin-top: 6px; }
+.btn.active { outline: 2px solid #60a5fa; }
 
 
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 12px; }
@@ -134,4 +138,74 @@ main.single { max-width: 1100px; margin: 0 auto; padding: 16px; }
   width: 32px; height: 32px; border-radius: 999px;
   font-size: 20px; line-height: 30px; text-align: center;
   cursor: pointer;
+}
+
+/* === Favorite Star Styles (overwrite) === */
+
+/* Ensure the star can position relative to the image */
+.card .thumb-wrap {
+  position: relative;
+}
+.card .thumb-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Star button */
+.card .thumb-wrap .fav-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 3; /* sit above image */
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--border, #334155);
+  background: #0b1222;
+  color: #9aa4b2;
+  font-size: 18px;
+  line-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    transform .12s ease,
+    background-color .2s ease,
+    color .2s ease,
+    box-shadow .2s ease,
+    border-color .2s ease;
+}
+.card .thumb-wrap .fav-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Active (favorited) state */
+.card .thumb-wrap .fav-btn.active {
+  background: #fbbf24;             /* amber */
+  color: #111827;                   /* near-black star */
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, .25);
+  border-color: #f59e0b;
+}
+
+/* Click flash animation */
+@keyframes favFlash {
+  0%   { box-shadow: 0 0 0 0 rgba(251, 191, 36, .5); transform: scale(1); }
+  60%  { box-shadow: 0 0 0 6px rgba(251, 191, 36, .15); transform: scale(1.1); }
+  100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); transform: scale(1); }
+}
+.card .thumb-wrap .fav-btn.flash {
+  animation: favFlash .35s ease-out;
+}
+
+/* Badge bump animation */
+@keyframes badgeBump {
+  0%   { transform: scale(1);    filter: brightness(1); }
+  30%  { transform: scale(1.15); filter: brightness(1.2); }
+  100% { transform: scale(1);    filter: brightness(1); }
+}
+.badge.bump {
+  animation: badgeBump .4s ease-out;
 }
