@@ -154,3 +154,9 @@ This README included.
 Core user stories implemented.
 
 Documented trade-offs and future work.
+
+## Screenshots
+![Rovers list](docs/01-rovers.png)
+![Photo grid](docs/02-grid.png)
+![Photo modal](docs/03-modal.png)
+![Favorites](docs/04-favorites.png)
