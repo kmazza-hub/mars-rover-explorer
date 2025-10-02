@@ -1,28 +1,28 @@
 // client/src/components/PhotoCard.jsx
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useFavorites } from '../hooks/useFavorites';
 
 export default function PhotoCard({ photo }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const [flash, setFlash] = useState(false);
 
-  // Defensive: hook fields can be undefined briefly
   const fav = useFavorites() || {};
   const favorites = fav.data || [];
   const isFav = !!favorites?.some((f) => f.nasa_id === photo.id);
 
   const openModal = () => {
-    // Put the photo id into the URL and pass the photo via state
     const sp = new URLSearchParams(location.search);
     sp.set('photo', String(photo.id));
-    navigate(
-      { pathname: location.pathname, search: sp.toString() },
-      { state: { photo } }
-    );
+    navigate({ pathname: location.pathname, search: sp.toString() }, { state: { photo } });
   };
 
   const toggleFav = (e) => {
     e.stopPropagation();
+    setFlash(true);
+    setTimeout(() => setFlash(false), 350);
+
     if (isFav) {
       fav.remove?.mutate?.(photo.id);
     } else {
@@ -32,9 +32,7 @@ export default function PhotoCard({ photo }) {
 
   const roverName = photo?.rover?.name || '';
   const cameraName = photo?.camera?.name || photo?.camera || '';
-  const when = photo?.earth_date
-    ? `Earth: ${photo.earth_date}`
-    : (photo?.sol != null ? `Sol: ${photo.sol}` : '');
+  const when = photo?.earth_date ? `Earth: ${photo.earth_date}` : (photo?.sol != null ? `Sol: ${photo.sol}` : '');
 
   return (
     <article
@@ -51,7 +49,7 @@ export default function PhotoCard({ photo }) {
           loading="lazy"
         />
         <button
-          className={`fav-btn ${isFav ? 'active' : ''}`}
+          className={`fav-btn ${isFav ? 'active' : ''} ${flash ? 'flash' : ''}`}
           aria-pressed={isFav}
           aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
           title={isFav ? 'Remove favorite' : 'Add favorite'}
