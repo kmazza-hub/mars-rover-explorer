@@ -54,3 +54,25 @@ main { background: var(--card); border: 1px solid var(--border); border-radius: 
 
 
 .error { color: #fca5a5; }
+
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0f1629;
+  color: var(--text);
+}
+.banner.warn { border-color: #f59e0b; box-shadow: 0 0 0 1px rgba(245,158,11,.15) inset; }
+.banner-actions { display: flex; gap: 8px; }
+
+.btn.ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.btn.ghost:hover { color: var(--text); }
