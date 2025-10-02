@@ -1,39 +1,35 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useRovers } from '../hooks/useRovers';
 
-
 export default function RoverList({ active }) {
-const { data, isLoading, error } = useRovers();
-const navigate = useNavigate();
-const { roverName } = useParams();
+  const { data, isLoading, isError } = useRovers();
+  const rovers = data?.rovers || [];
+  const { search } = useLocation();
 
+  if (isLoading) return <aside>Loading rovers…</aside>;
+  if (isError) return <aside className="error">Failed to load rovers.</aside>;
 
-if (isLoading) return <div>Loading rovers…</div>;
-if (error) return <div className="error">Failed to load rovers.</div>;
-
-
-return (
-<ul className="rover-list" role="list">
-{data.rovers.map((r) => {
-const k = r.name.toLowerCase();
-return (
-<li key={r.id}>
-<button
-className={`rover-item ${active === k ? 'active' : ''}`}
-onClick={() => navigate(`/${k}`)}
->
-<strong>{r.name}</strong>
-<div className="meta">
-<span>Launch: {r.launch_date}</span>
-<span>Landing: {r.landing_date}</span>
-<span>Status: {r.status}</span>
-<span>Total photos: {r.total_photos}</span>
-</div>
-<div className="cameras">Cameras: {r.cameras.map(c=>c.name).join(', ')}</div>
-</button>
-</li>
-);
-})}
-</ul>
-);
+  return (
+    <nav aria-label="Rovers">
+      <ul className="rover-list">
+        {rovers.map((r) => {
+          const isActive = active === r.name.toLowerCase();
+          return (
+            <li key={r.id} className={isActive ? 'active' : ''}>
+              <NavLink to={`/${r.name.toLowerCase()}${search}`} className="rover-link">
+                {r.name}
+              </NavLink>
+              <dl className="rover-meta">
+                <div><dt>Launch</dt><dd>{r.launch_date}</dd></div>
+                <div><dt>Landing</dt><dd>{r.landing_date}</dd></div>
+                <div><dt>Status</dt><dd style={{ textTransform: 'capitalize' }}>{r.status}</dd></div>
+                <div><dt>Total photos</dt><dd>{(r.total_photos ?? '').toLocaleString?.() || r.total_photos}</dd></div>
+                <div><dt>Cameras</dt><dd>{(r.cameras || []).map(c => c.name).join(', ')}</dd></div>
+              </dl>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
 }

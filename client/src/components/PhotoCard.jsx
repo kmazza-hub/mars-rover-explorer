@@ -6,16 +6,19 @@ export default function PhotoCard({ photo }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Be defensive: the hook itself or its fields could be undefined briefly
+  // Defensive: hook fields can be undefined briefly
   const fav = useFavorites() || {};
   const favorites = fav.data || [];
   const isFav = !!favorites?.some((f) => f.nasa_id === photo.id);
 
   const openModal = () => {
-    // Put the photo id into the URL so PhotoModal can pick it up
+    // Put the photo id into the URL and pass the photo via state
     const sp = new URLSearchParams(location.search);
     sp.set('photo', String(photo.id));
-    navigate({ pathname: location.pathname, search: sp.toString() });
+    navigate(
+      { pathname: location.pathname, search: sp.toString() },
+      { state: { photo } }
+    );
   };
 
   const toggleFav = (e) => {
@@ -27,10 +30,11 @@ export default function PhotoCard({ photo }) {
     }
   };
 
-  // Defensive metadata reads (NASA shape: photo.rover.name, photo.camera.name)
   const roverName = photo?.rover?.name || '';
   const cameraName = photo?.camera?.name || photo?.camera || '';
-  const when = photo?.earth_date ? `Earth: ${photo.earth_date}` : (photo?.sol != null ? `Sol: ${photo.sol}` : '');
+  const when = photo?.earth_date
+    ? `Earth: ${photo.earth_date}`
+    : (photo?.sol != null ? `Sol: ${photo.sol}` : '');
 
   return (
     <article
