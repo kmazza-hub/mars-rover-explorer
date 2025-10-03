@@ -208,4 +208,67 @@ MIT © 2025
 ![Favorites](docs/04-favorites.png)
 
 
+🤝 How AI Helped (Collaboration Notes)
 
+I used an AI coding assistant to accelerate parts of this take-home while keeping full ownership of the work. Below is exactly how it helped and what I (Keith Mazza) did.
+
+What AI assisted with
+
+Scoping & plan
+
+Turned the prompt into a short backlog (rovers list, photo browsing, filters, pagination, modal, favorites).
+
+Bug hunting & fixes
+
+Express router error (router is not defined) – corrected route wiring.
+
+Modal crash (“Rendered more hooks than during previous render”) – moved hooks outside conditional branches.
+
+PhotoCard undefined – guarded props (photo?.img_src) and improved loading states.
+
+Mongoose duplicate index – explained the warning and how to avoid double indexing.
+
+CORS & 403s – set CLIENT_ORIGIN and clarified NASA key usage / rate limits.
+
+Date handling – sane defaults (use rover max_date) and prev/next date helpers.
+
+Asset path – fixed header logo & favicon path (/km-wave-icon1.svg).
+
+Persistence & API proxy
+
+Added an in-memory TTL cache around NASA endpoints to reduce rate-limit pressure.
+
+Deployment
+
+Netlify: netlify.toml, SPA redirects, VITE_API_URL pointing at the API.
+
+Render: set service Root Directory=server, npm ci + npm start, and environment variables.
+
+Explained free-tier “cold start” behavior.
+
+MongoDB Atlas tips
+
+SRV URI format, URL-encoding passwords, and IP allow-list reminders.
+
+Docs & polish
+
+Organized the README (architecture, setup, trade-offs, future work).
+
+Added a small test scaffold with Vitest/Supertest for API basics.
+
+Provided a KM wave banner/icon and a README footer signature.
+
+Why use AI here?
+
+AI sped up boilerplate and pattern recall so I could focus on product quality, data flow, and clean MERN integration. Every change was reviewed and adjusted by me to fit this codebase and the assignment’s goals.
+
+Fixing the modal hooks bug by ensuring all hooks run unconditionally.
+
+Adding CLIENT_ORIGIN on the server to resolve Netlify → Render CORS.
+
+Creating the Render service with Root Directory=server and npm ci → npm start.
+
+
+</details>
+
+Ownership & Responsibility: All final decisions, code, and content were reviewed, tested, and approved by me. Any mistakes are mine—and I’m happy to walk through trade-offs or implementation details live.
