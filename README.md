@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/km-wave-banner.svg" alt="KM wave banner" width="100%">
+  <img src="docs/km-wave-icon.svg" alt="KM wave banner" width="100%">
 </p>
 
 Mars Rover Photo Explorer (MERN)
