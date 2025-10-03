@@ -1,39 +1,40 @@
-import { useEffect, useRef, useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useFavorites } from '../hooks/useFavorites';
 
 export default function Header() {
-  const { data } = useFavorites();
-  const count = Array.isArray(data) ? data.length : 0;
-
-  // bump animation when count changes
-  const [bump, setBump] = useState(false);
-  const prev = useRef(count);
-
-  useEffect(() => {
-    if (prev.current === count) return;
-    prev.current = count;
-    setBump(true);
-    const t = setTimeout(() => setBump(false), 400);
-    return () => clearTimeout(t);
-  }, [count]);
+  const { data: favs = [] } = useFavorites();
 
   return (
     <header className="header">
-      <Link to="/" className="brand">Mars Rover Explorer</Link>
-      <nav className="nav">
-        <NavLink to="/" end className={({ isActive }) => isActive ? 'active' : ''}>
+      <div className="brand" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        {/* KM logo */}
+        <img
+          src="/km-wave-icon.svg"
+          alt="KM logo"
+          width={28}
+          height={28}
+          style={{ marginRight: 10 }}
+        />
+        <Link to="/" className="brand-title">
+          Mars Rover Explorer
+        </Link>
+      </div>
+
+      <nav className="nav" style={{ display: 'flex', gap: 16 }}>
+        <NavLink
+          to="/"
+          end
+          className={({ isActive }) => (isActive ? 'active' : undefined)}
+        >
           Explore
         </NavLink>
-        <NavLink to="/favorites" className={({ isActive }) => isActive ? 'active fav-link' : 'fav-link'}>
+
+        <NavLink
+          to="/favorites"
+          className={({ isActive }) => (isActive ? 'active' : undefined)}
+        >
           Favorites
-          <span
-            className={`badge ${bump ? 'bump' : ''}`}
-            aria-label={`${count} favorites`}
-            aria-live="polite"
-          >
-            {count}
-          </span>
+          {favs.length ? <span className="badge" aria-label={`${favs.length} favorites`}> {favs.length}</span> : null}
         </NavLink>
       </nav>
     </header>
