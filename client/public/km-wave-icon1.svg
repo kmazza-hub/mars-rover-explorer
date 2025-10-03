@@ -1,0 +1,16 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KM wave icon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B132B"></stop>
+      <stop offset="1" stop-color="#111b34"></stop>
+    </linearGradient>
+    <linearGradient id="w" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#40E0D0"></stop>
+      <stop offset="1" stop-color="#2BC0E4"></stop>
+    </linearGradient>
+  </defs>
+
+  <rect width="128" height="128" rx="22" fill="url(#bg)"></rect>
+  <path d="M-2,86 C20,74 36,98 58,90 C84,80 96,102 130,90 L130,130 L-2,130 Z" fill="url(#w)"></path>
+  <text x="64" y="70" text-anchor="middle" font-family="Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-weight="900" font-size="48" fill="#ffffff">KM</text>
+</svg>

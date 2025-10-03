@@ -9,7 +9,7 @@ export default function Header() {
       <div className="brand" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         {/* KM logo */}
         <img
-          src="/km-wave-icon.svg"
+          src="/km-wave-icon1.svg"
           alt="KM logo"
           width={28}
           height={28}
@@ -21,20 +21,15 @@ export default function Header() {
       </div>
 
       <nav className="nav" style={{ display: 'flex', gap: 16 }}>
-        <NavLink
-          to="/"
-          end
-          className={({ isActive }) => (isActive ? 'active' : undefined)}
-        >
+        <NavLink to="/" end className={({ isActive }) => (isActive ? 'active' : undefined)}>
           Explore
         </NavLink>
 
-        <NavLink
-          to="/favorites"
-          className={({ isActive }) => (isActive ? 'active' : undefined)}
-        >
+        <NavLink to="/favorites" className={({ isActive }) => (isActive ? 'active' : undefined)}>
           Favorites
-          {favs.length ? <span className="badge" aria-label={`${favs.length} favorites`}> {favs.length}</span> : null}
+          {favs.length ? (
+            <span className="badge" aria-label={`${favs.length} favorites`}> {favs.length}</span>
+          ) : null}
         </NavLink>
       </nav>
     </header>
