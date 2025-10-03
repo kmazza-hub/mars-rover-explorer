@@ -1,172 +1,202 @@
+<p align="center">
+  <img src="docs/km-wave-banner.svg" alt="KM wave banner" width="100%">
+</p>
+
 Mars Rover Photo Explorer (MERN)
+<p align="center"> <a href="https://mars-rover-explore.netlify.app"><img alt="Netlify Status" src="https://img.shields.io/badge/Live%20App-Netlify-brightgreen?logo=netlify"></a> &nbsp; <a href="https://mars-rover-explorer.onrender.com/api/health"><img alt="Render API" src="https://img.shields.io/badge/API-Render-blue?logo=render"></a> &nbsp; <img alt="Stack" src="https://img.shields.io/badge/Stack-MERN-%2361DAFB"> &nbsp; <img alt="License" src="https://img.shields.io/badge/License-MIT-informational"> </p>
 
-A modern MERN app to explore photos from NASA’s Mars rovers. React (Vite) frontend, Node/Express proxy backend, and MongoDB for persistence.
+Explore Mars rover images via NASA’s public API with a smooth, modern UI.
+Built as a focused MERN take-home to showcase product sense, data handling, and clean architecture.
 
-🚀 Overview
+Live Demo:
 
-Browse rovers with key metadata (launch/landing, status, cameras, total photos).
+Client: https://mars-rover-explore.netlify.app
 
-View rover photos by Earth date or Martian sol.
+API: https://mars-rover-explorer.onrender.com
+ → health: /api/health
 
-Filter by camera.
+✨ Highlights
 
-Pagination with “Load More” (+ light infinite scrolling).
+Browse Rovers with key metadata (launch/landing dates, status, cameras, total photos).
 
-Modal / lightbox with photo metadata.
+Photo Explorer by Earth date or Sol, with camera filter.
 
-Favorites saved to MongoDB (add/remove, badge count, Favorites page).
+Pagination & Infinite Scroll (so the page stays snappy).
 
-Responsive layout + basic a11y (keyboard close, alt text, semantic HTML).
+Photo Modal (lightbox) with keyboard support (Esc to close) and metadata.
 
-Express server proxies the NASA API and adds in-memory caching + polite retry for rate limits.
+Favorites persisted in MongoDB (tiny UX badge + toggle).
 
-🏗 Architecture
+Responsive & Accessible: semantic HTML, alt text, keyboard-navigable UI.
 
-Frontend: React (Vite) • React Router • React Query
+Server Proxy & Caching: Node/Express proxy to NASA, with in-memory TTL cache to reduce rate limits.
 
-Backend: Express • Axios proxy • Mongoose
+Deployed (Netlify + Render) with environment-based configuration.
 
-Database: MongoDB (local or Atlas) for favorites
+🧭 Screenshots
 
-Styling: Plain CSS (clean, modern)
+Add or update these images under docs/ in your repo.
 
+Rovers	Grid	Modal	Favorites
+
+	
+	
+	
+🧱 Architecture
 mars-rover-explorer/
-├── client/            # React frontend
-├── server/            # Express backend + MongoDB
-├── .github/workflows/ # CI (GitHub Actions)
-├── docs/              # screenshots / demo
-└── README.md
+├─ client/               # React + Vite UI
+│  ├─ src/
+│  │  ├─ components/     # Header, RoverList, Controls, PhotoGrid, PhotoModal…
+│  │  ├─ hooks/          # useRovers, usePhotos, useFavorites (React Query)
+│  │  └─ api/            # axios client (reads VITE_API_URL)
+│  └─ public/_redirects  # SPA fallback
+├─ server/               # Express API proxy + MongoDB (Mongoose)
+│  ├─ src/
+│  │  ├─ routes/         # /api/rovers, /api/photos, /api/favorites
+│  │  ├─ nasa.js         # thin client to NASA API
+│  │  └─ cache.js        # TTL in-memory cache
+│  └─ .env.example
+├─ netlify.toml          # build config for client
+└─ README.md
 
-⚙️ Setup
-Prereqs
 
-Node.js 20+ (LTS recommended)
+Client: React + React Router + React Query + axios
+Server: Express + axios + Mongoose + CORS + morgan
+DB: MongoDB (Atlas or local) – favorites collection
+Styling: Modern CSS, dark theme, responsive layout
 
-MongoDB running locally (or Atlas connection string)
+⚙️ Setup (Local)
 
-Environment Variables
+Prereqs: Node 18+ (or 20), MongoDB (local or Atlas).
 
-Create server/.env (don’t commit secrets):
+Install
+
+npm run install:all          # installs client & server deps
+
+
+Environment
+
+Create server/.env (or copy from .env.example):
 
 PORT=5000
-MONGODB_URI=mongodb://127.0.0.1:27017/mars_rover
+MONGODB_URI=mongodb://127.0.0.1:27017/mars_rover   # or your Atlas SRV URI
 NASA_API_BASE=https://api.nasa.gov/mars-photos/api/v1
-NASA_API_KEY=YOUR_PERSONAL_KEY   # get one at https://api.nasa.gov
+NASA_API_KEY=YOUR_REAL_NASA_KEY
 CLIENT_ORIGIN=http://localhost:5173
 CACHE_TTL_MS=300000
 
 
-You can use DEMO_KEY temporarily, but it hits rate limits quickly.
+Using Atlas? URL-encode special characters in your password
+(# → %23, @ → %40, / → %2F, etc.).
 
 Create client/.env:
 
 VITE_API_URL=http://localhost:5000/api
 
-Install & Run
 
-From the repo root:
+Run dev (both apps)
 
-# install deps for both apps
-npm run install:all
-
-# start server + client together
 npm run dev
+# client: http://localhost:5173
+# server: http://localhost:5000
+# health: http://localhost:5000/api/health
 
-
-Client: http://localhost:5173
-
-Server: http://localhost:5000/api
-
-📱 Features
-
-Core
-
-Rovers list (+ launch/landing, status, cameras, total photos)
-
-Select rover → fetch photos
-
-Earth date / Sol switch
-
-Camera filter
-
-Pagination / Load More
-
-Modal with metadata
-
-Responsive & a11y basics
-
-Persistence
-
-Favorite/unfavorite photos
-
-Favorites stored in MongoDB
-
-Favorites page (/favorites) with remove
-
-Proxy & Caching
-
-Express proxy to NASA API
-
-In-memory cache (TTL configurable)
-
-Retry/backoff for 429/5xx
-
-Friendly UI banner when NASA rate-limits
-
-URLs / Shareable state
-
-Rover/date/camera and selected photo ID are reflected in the URL (query params)
-
-🧪 Testing & CI
-
-Backend tests (Vitest + Supertest):
-
+🧪 Tests
 npm --prefix server run test
 
 
-CI via GitHub Actions runs tests on every push/PR (.github/workflows/ci.yml).
+Small vitest/supertest suite for the API (health, rovers, input validation).
 
-🛠 Scripts
+🚀 Deployment
+Client (Netlify)
 
-npm run install:all – install server + client
+netlify.toml at repo root:
 
-npm run dev – start both (concurrently)
+[build]
+  command = "npm --prefix client ci && npm --prefix client run build"
+  publish = "client/dist"
 
-npm --prefix server run start – start backend only (prod)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
-npm --prefix server run test – backend tests
 
-🩹 Troubleshooting
+Env var: VITE_API_URL=https://mars-rover-explorer.onrender.com/api
 
-403 from NASA: your NASA_API_KEY is missing/invalid. Use a personal key and restart the server.
+Server (Render)
 
-429 rate limit: too many requests—slow down or switch dates; the server retries politely and caches responses.
+Root Directory: server
 
-Mongo connection refused: ensure MongoDB is running locally or set a valid Atlas MONGODB_URI.
+Build: npm ci
 
-Modal doesn’t open: ensure the URL gains ?photo=ID when clicking; Esc/backdrop click closes it.
+Start: npm start
 
-📝 Decisions & Trade-offs
+Env vars:
 
-React Query for request state & caching (simple + reliable).
+NODE_VERSION=20
+MONGODB_URI=<your Atlas SRV URI>
+NASA_API_BASE=https://api.nasa.gov/mars-photos/api/v1
+NASA_API_KEY=<your key>
+CLIENT_ORIGIN=https://mars-rover-explore.netlify.app
+CACHE_TTL_MS=300000
 
-In-memory server cache instead of Redis for easy local setup.
 
-Persistence limited to Favorites to satisfy the Mongo requirement cleanly.
+Health: https://mars-rover-explorer.onrender.com/api/health
 
-Styling kept minimal (plain CSS) to focus on UX and functionality.
+Note: Free Render instances “sleep”; the first request may take a few seconds to wake.
+
+📚 API Overview (server)
+
+GET /api/health → { ok: true }
+
+GET /api/rovers → rover metadata (cached)
+
+GET /api/photos?rover=<name>&earth_date=YYYY-MM-DD&page=1&camera=<optional>
+
+or sol=<number> instead of earth_date
+
+GET /api/favorites → list favorites
+
+POST /api/favorites → { nasa_id, img_src, earth_date, sol, rover, camera }
+
+DELETE /api/favorites/:nasa_id
+
+🧠 Decisions & Trade-offs
+
+React Query for caching/pagination simplicity.
+
+Server-side cache (in-memory TTL) to mitigate NASA rate limits quickly.
+
+Favorites chosen as the persistence feature (covers CRUD + UI feedback) to meet MERN requirement.
+
+Plain CSS for speed and clarity; easy to swap to Tailwind/MUI.
+
+Free-tier deploy (Render + Netlify) for quick demo; note cold starts.
 
 🔮 Future Work
 
-Dark mode toggle.
+Dark/Light theme toggle
 
-Skeleton loaders & masonry grid.
+Masonry grid + skeleton loaders
 
-Offline-first (service worker) and smarter client-side caching.
+Shareable deep links & URL state sync
 
-More tests (frontend hooks/components) and e2e.
+More tests + GitHub Actions CI
 
-Redis-backed cache and per-user auth for favorites.
+Redis/Upstash for cache, image CDN, and offline hints
+
+🙏 Attribution
+
+Data from the NASA Mars Rover Photos API — https://api.nasa.gov/
+
+Images © NASA/JPL-Caltech.
+
+License
+
+MIT © 2025
+
+<p align="center"> <sub>Built by <strong>Keith Mazza</strong> — Mars Rover Photo Explorer</sub><br/> <sub>https://mars-rover-explore.netlify.app • https://mars-rover-explorer.onrender.com</sub> </p>
 
 📸 Screenshots
 
@@ -179,12 +209,3 @@ Redis-backed cache and per-user auth for favorites.
 
 
 
-
-
-✅ Submission
-
-Public GitHub repo with regular commits.
-
-This README included.
-
-Core user stories implemented; Mongo persistence demonstrated.
